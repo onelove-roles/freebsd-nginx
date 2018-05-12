@@ -1,0 +1,41 @@
+---
+- name: install packages
+  with_items: "{{ nginx_packages }}"
+  pkgng:
+    name: "{{ item.name }}"
+
+- name: enable nginx service
+  template:
+    src: nginx.j2
+    dest: /etc/rc.conf.d/nginx
+
+- name: create conf.d directory
+  file:
+    path: /usr/local/etc/nginx/conf.d
+    state: directory
+
+- name: create certs directory
+  file:
+    path: /usr/local/etc/nginx/certs
+    state: directory
+
+- name: configure nginx
+  template:
+    src: nginx.conf.j2
+    dest: /usr/local/etc/nginx/nginx.conf
+
+- name: create consul-template directory for nginx
+  file:
+    path: "/usr/local/etc/consul-templates/{{ nginx_consul_template_prefix }}"
+    state: directory
+
+- name: copy nginx consul-template files
+  with_items: "{{ nginx_consul_templates }}"
+  copy:
+    src: "{{ item.filename }}"
+    dest: "{{ consul_template_root }}/{{ nginx_consul_template_prefix }}/{{ item.filename }}"
+
+- name: configure consul-template for nginx
+  template:
+    src: nginx.consul.j2
+    dest: /usr/local/etc/consul-template.d/nginx.conf

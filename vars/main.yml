@@ -1,0 +1,14 @@
+---
+nginx_packages:
+  - name: nginx
+
+nginx_consul_template_prefix: nginx
+
+nginx_consul_templates:
+  - destination: /tmp/consul-timestamp.log
+    filename: consul-timestamp.tpl
+    command: "service consul-template restart"
+
+  - destination: /usr/local/etc/nginx/conf.d/vhosts.conf
+    filename: vhosts.conf.tpl
+    command: "sh -c 'service nginx restart || true'"
