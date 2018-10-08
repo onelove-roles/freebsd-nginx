@@ -9,8 +9,9 @@ upstream {{ printf $domain }}_upstream {
 server {
     server_name {{ printf $domain }};
     listen 443 ssl;
-    ssl_certificate /usr/local/etc/nginx/certs/{{ printf $domain }}.cert.pem;
+    ssl_certificate /usr/local/etc/nginx/certs/{{ printf $domain }}.fullchain.pem;
     ssl_certificate_key /usr/local/etc/nginx/certs/{{ printf $domain }}.privkey.pem;
+    ssl_trusted_certificate /usr/local/etc/nginx/certs/{{ printf $domain }}.chain.pem;
 
     root /usr/local/www/{{ printf $domain }};
     access_log /var/log/nginx/{{ printf $domain }}.log;
