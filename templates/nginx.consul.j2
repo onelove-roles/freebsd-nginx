@@ -1,7 +1,0 @@
-{% for item in nginx_consul_templates %}
-template {
-  source = "{{ consul_template_root }}/{{ nginx_consul_template_prefix }}/{{ item.filename }}"
-  destination = "{{ item.destination }}"
-  command = "{{ item.command }}"
-}
-{% endfor %}

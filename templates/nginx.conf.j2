@@ -39,11 +39,11 @@ http {
 
     #gzip  on;
 
-    server {
-        listen 80;
-        server_name _;
-        return 301 https://$host$request_uri;
-    }
+    #server {
+    #    listen 80;
+    #    server_name _;
+    #    return 301 https://$host$request_uri;
+    #}
 
 
     # another virtual host using mix of IP-, name-, and port-based configuration
