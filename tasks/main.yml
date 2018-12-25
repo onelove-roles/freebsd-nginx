@@ -22,3 +22,17 @@
     dest: /usr/local/etc/nginx/nginx.conf
   notify:
     - restart nginx
+
+- name: dhparam nginx
+  command: /usr/bin/openssl dhparam -out /usr/local/etc/nginx/dhparam.pem 4096
+  args:
+    creates: /usr/local/etc/nginx/dhparam.pem
+  notify:
+    - restart nginx
+
+- name: configure ssl
+  template:
+    src: ssl_params.j2
+    dest: /usr/local/etc/nginx/ssl_params
+  notify:
+    - restart nginx
