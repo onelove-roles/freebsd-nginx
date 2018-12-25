@@ -37,13 +37,15 @@ http {
     #keepalive_timeout  0;
     keepalive_timeout  65;
 
-    #gzip  on;
+    gzip  on;
 
-    #server {
-    #    listen 80;
-    #    server_name _;
-    #    return 301 https://$host$request_uri;
-    #}
+    client_max_body_size 2M;
+
+    server {
+        listen 80;
+        server_name _;
+        return 301 https://$host$request_uri;
+    }
 
 
     # another virtual host using mix of IP-, name-, and port-based configuration
