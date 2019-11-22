@@ -1,3 +1,3 @@
 ---
 nginx_packages:
-  - name: nginx
+  - name: "{{ nginx_flavor }}"
