@@ -3,3 +3,8 @@
   service:
     name: nginx
     state: restarted
+
+- name: restart newsyslog
+  service:
+    name: newsyslog
+    state: restarted

@@ -1,3 +1,4 @@
 ---
 nginx_packages:
+  - name: goaccess
   - name: "{{ nginx_flavor }}"

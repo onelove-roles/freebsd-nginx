@@ -23,16 +23,46 @@
   notify:
     - restart nginx
 
-- name: dhparam nginx
-  command: /usr/bin/openssl dhparam -out /usr/local/etc/nginx/dhparam.pem 4096
-  args:
-    creates: /usr/local/etc/nginx/dhparam.pem
-  notify:
-    - restart nginx
-
 - name: configure ssl
   template:
     src: ssl_params.j2
     dest: /usr/local/etc/nginx/ssl_params
+  notify:
+    - restart nginx
+
+- name: create newsyslog conf.d directory
+  file:
+    path: /usr/local/etc/newsyslog.conf.d
+    state: directory
+
+- name: configure newsyslog
+  template:
+    src: newsyslog.conf.j2
+    dest: /usr/local/etc/newsyslog.conf.d/nginx.conf
+  notify:
+    - restart newsyslog
+
+- name: create newsyslog helper
+  template:
+    src: nginx-rotate.sh.j2
+    dest: /usr/local/bin/nginx-rotate.sh
+    mode: 0755
+
+- name: configure analytics vhost
+  template:
+    src: analytics.conf.j2
+    dest: "/usr/local/etc/nginx/conf.d/analytics.{{ nginx_domain }}.conf"
+  notify:
+    - restart nginx
+
+- name: create analytics www root
+  file:
+    path: "/usr/local/www/analytics.{{ nginx_domain }}"
+    state: directory
+
+- name: dhparam nginx
+  command: /usr/bin/openssl dhparam -out /usr/local/etc/nginx/dhparam.pem 4096
+  args:
+    creates: /usr/local/etc/nginx/dhparam.pem
   notify:
     - restart nginx
