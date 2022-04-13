@@ -8,7 +8,9 @@ for logfile in `ls -1 *.*.log.0`; do
   domain=${logfile%.log.0}
   if [ ! -e /var/db/goaccess/${domain} ]; then
     mkdir /var/db/goaccess/${domain}
+    echo '/non/existing/link/here' >/var/db/goaccess/${domain}/exclude.txt
   fi
-  /usr/local/bin/goaccess $logfile -o ${wwwroot}/${domain}.html --log-format=COMBINED --persist --restore --db-path /var/db/goaccess/${domain}
+  /usr/bin/grep -v -f /var/db/goaccess/${domain}/exclude.txt ${logfile} |  /usr/local/bin/goaccess -o ${wwwroot}/${domain}.html --log-format=COMBINED --persist --restore --db-path /var/db/goaccess/${domain}
   echo "<div><a href=\"${domain}.html\">${domain}</a></div>" >>${wwwroot}/index.html
 done
+service nginx reload
